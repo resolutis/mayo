@@ -32,7 +32,8 @@ enum Format {
     Format_VRML,
     Format_X3D,
     Format_DirectX,
-    Format_Blender
+    Format_Blender,
+    Format_Kioko
 };
 
 // Returns identifier(unique short name) corresponding to 'format'

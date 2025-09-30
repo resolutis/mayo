@@ -13,6 +13,7 @@
 #include "io_occ_step.h"
 #include "io_occ_stl.h"
 #include "io_occ_vrml_writer.h"
+#include "io_occ_kioko.h"
 
 #if OCC_VERSION_HEX >= OCC_VERSION_CHECK(7, 4, 0)
 #  include "io_occ_gltf_reader.h"
@@ -38,7 +39,7 @@ namespace { using PtrPropertyGroup = std::unique_ptr<PropertyGroup>; }
 Span<const Format> OccFactoryReader::formats() const
 {
     static const Format arrayFormat[] = {
-        Format_STEP, Format_IGES, Format_OCCBREP, Format_STL
+        Format_STEP, Format_IGES, Format_OCCBREP, Format_STL, Format_Kioko
     #if OCC_VERSION_HEX >= OCC_VERSION_CHECK(7, 4, 0)
         , Format_GLTF, Format_OBJ
     #endif
@@ -59,6 +60,8 @@ std::unique_ptr<Reader> OccFactoryReader::create(Format format) const
         return std::make_unique<OccBRepReader>();
     if (format == Format_STL)
         return std::make_unique<OccStlReader>();
+    if (format == Format_Kioko)
+        return std::make_unique<OccKiokoReader>();
 
 #if OCC_VERSION_HEX >= OCC_VERSION_CHECK(7, 4, 0)
     if (format == Format_GLTF)
@@ -81,6 +84,8 @@ PtrPropertyGroup OccFactoryReader::createProperties(Format format, PropertyGroup
         return OccStepReader::createProperties(parentGroup);
     if (format == Format_IGES)
         return OccIgesReader::createProperties(parentGroup);
+    if (format == Format_Kioko)
+        return OccKiokoReader::createProperties(parentGroup);
 
 #if OCC_VERSION_HEX >= OCC_VERSION_CHECK(7, 4, 0)
     if (format == Format_GLTF)
@@ -100,7 +105,7 @@ PtrPropertyGroup OccFactoryReader::createProperties(Format format, PropertyGroup
 Span<const Format> OccFactoryWriter::formats() const
 {
     static const Format arrayFormat[] = {
-        Format_STEP, Format_IGES, Format_OCCBREP, Format_STL, Format_VRML
+        Format_STEP, Format_IGES, Format_OCCBREP, Format_STL, Format_VRML, Format_Kioko
     #if OCC_VERSION_HEX >= OCC_VERSION_CHECK(7, 5, 0)
         , Format_GLTF
     #endif
@@ -123,6 +128,8 @@ std::unique_ptr<Writer> OccFactoryWriter::create(Format format) const
         return std::make_unique<OccStlWriter>();
     if (format == Format_VRML)
         return std::make_unique<OccVrmlWriter>();
+    if (format == Format_Kioko)
+        return std::make_unique<OccKiokoWriter>();
 
 #if OCC_VERSION_HEX >= OCC_VERSION_CHECK(7, 5, 0)
     if (format == Format_GLTF)
@@ -147,6 +154,8 @@ PtrPropertyGroup OccFactoryWriter::createProperties(Format format, PropertyGroup
         return OccStlWriter::createProperties(parentGroup);
     if (format == Format_VRML)
         return OccVrmlWriter::createProperties(parentGroup);
+    if (format == Format_Kioko)
+        return OccKiokoWriter::createProperties(parentGroup);
 
 #if OCC_VERSION_HEX >= OCC_VERSION_CHECK(7, 5, 0)
     if (format == Format_GLTF)
