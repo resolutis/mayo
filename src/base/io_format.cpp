@@ -33,6 +33,7 @@ std::string_view formatIdentifier(Format format)
     case Format_X3D:   return "X3D";
     case Format_DirectX: return "X";
     case Format_Blender: return "Blender";
+    case Format_Kioko: return "Kioko";
     }
 
     return "";
@@ -61,6 +62,7 @@ std::string_view formatName(Format format)
     case Format_X3D:   return "Extensible 3D Graphics(ISO/IEC 19775/19776/19777)";
     case Format_DirectX: return "DirectX File Format";
     case Format_Blender: return "Blender File Format";
+    case Format_Kioko: return "Kioko Lang CAD Format";
     }
 
     return "";
@@ -87,6 +89,7 @@ Span<std::string_view> formatFileSuffixes(Format format)
     static std::string_view suffix_x3d[]  = { "x3d", "x3dv", "x3db", "x3dz", "x3dbz", "x3dvz" };
     static std::string_view suffix_directx[]  = { "x" };
     static std::string_view suffix_blender[]  = { "blend", "blender", "blend1", "blend2" };
+    static std::string_view suffix_kioko[]  = { "kioko", "kko" };
 
     switch (format) {
     case Format_Unknown: return {};
@@ -109,6 +112,7 @@ Span<std::string_view> formatFileSuffixes(Format format)
     case Format_X3D:   return suffix_x3d;
     case Format_DirectX: return suffix_directx;
     case Format_Blender: return suffix_blender;
+    case Format_Kioko: return suffix_kioko;
     }
 
     return {};
@@ -116,7 +120,7 @@ Span<std::string_view> formatFileSuffixes(Format format)
 
 bool formatProvidesBRep(Format format)
 {
-    static const Format brepFormats[] = { Format_STEP, Format_IGES, Format_OCCBREP, Format_DXF };
+    static const Format brepFormats[] = { Format_STEP, Format_IGES, Format_OCCBREP, Format_DXF, Format_Kioko };
     return std::any_of(
                 std::cbegin(brepFormats),
                 std::cend(brepFormats),
